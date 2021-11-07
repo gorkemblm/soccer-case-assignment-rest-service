@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FootballerRetrieveDto {
+    private String id;
     private String firstName;
     private String lastName;
     private int age;

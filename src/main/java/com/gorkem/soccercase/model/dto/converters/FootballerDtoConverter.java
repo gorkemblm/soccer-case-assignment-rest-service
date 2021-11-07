@@ -3,6 +3,7 @@ package com.gorkem.soccercase.model.dto.converters;
 import com.gorkem.soccercase.model.Footballer;
 import com.gorkem.soccercase.model.dto.FootballerCreateDto;
 import com.gorkem.soccercase.model.dto.FootballerRetrieveDto;
+import com.gorkem.soccercase.model.dto.FootballerUpdateDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,5 +30,13 @@ public class FootballerDtoConverter {
                 .firstName(footballerCreateDto.getFirstName())
                 .lastName(footballerCreateDto.getLastName())
                 .build();
+    }
+
+    public Footballer convertForUpdate(FootballerUpdateDto footballerUpdateDto, Footballer footballer) {
+        footballer.setAge(footballerUpdateDto.getAge());
+        footballer.setPosition(footballerUpdateDto.getPosition());
+        footballer.setTeam(footballerUpdateDto.getTeam());
+
+        return footballer;
     }
 }

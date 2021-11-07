@@ -12,12 +12,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FootballerRetrieveDto {
-    private String id;
-    private String firstName;
-    private String lastName;
+public class FootballerUpdateDto {
     private int age;
-    private Nationality nationality;
     private Position position;
     private Team team;
 }

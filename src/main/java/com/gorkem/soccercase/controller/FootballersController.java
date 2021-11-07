@@ -3,13 +3,13 @@ package com.gorkem.soccercase.controller;
 import com.gorkem.soccercase.model.Footballer;
 import com.gorkem.soccercase.model.dto.FootballerCreateDto;
 import com.gorkem.soccercase.model.dto.FootballerRetrieveDto;
+import com.gorkem.soccercase.model.dto.FootballerUpdateDto;
 import com.gorkem.soccercase.service.FootballerService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 
 
 @RestController
@@ -28,22 +28,35 @@ public class FootballersController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Object> create(FootballerCreateDto footballerCreateDto) {
+    public ResponseEntity<Object> createFootballer(@RequestBody FootballerCreateDto footballerCreateDto) {
+        FootballerRetrieveDto savedFootballer = this.footballerService.createFootballer(footballerCreateDto);
 
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedFootballer.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
-//
-//    @RequestMapping(method = RequestMethod.PUT)
-//    public void update() {
-//
-//    }
-//
-//    @RequestMapping(method = RequestMethod.DELETE)
-//    public void delete() {
-//
-//    }
-//
-//    @RequestMapping(method = RequestMethod.GET)
-//    public void retrieveFootballer() {
-//
-//    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<Object> updateFootballer(@RequestParam String id, @RequestBody FootballerUpdateDto footballerUpdateDto) {
+        return ResponseEntity.ok(this.footballerService.updateFootballer(id, footballerUpdateDto));
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
+    public ResponseEntity<Object> delete(@PathVariable(name = "id") String id) {
+        var isDeleted = this.footballerService.deleteFootballer(id);
+
+        if (!isDeleted) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
+    public ResponseEntity<Object> retrieveFootballer(@PathVariable(name = "id") String id) {
+        return ResponseEntity.ok(this.footballerService.retrieveFootballer(id));
+    }
 }

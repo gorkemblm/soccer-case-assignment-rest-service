@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(name = "/teams")
+@RequestMapping
 public class TeamsController {
 
     private final TeamService teamService;
@@ -20,13 +20,13 @@ public class TeamsController {
         this.teamService = teamService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, path = "/teams")
     public ResponseEntity<Object> retrieveTeams() {
         return ResponseEntity.ok(this.teamService.retrieveTeams());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Object> create(@RequestBody TeamCreateDto teamCreateDto) {
+    @RequestMapping(method = RequestMethod.POST, path = "/create-team")
+    public ResponseEntity<Object> createTeam(@RequestBody TeamCreateDto teamCreateDto) {
         TeamRetrieveDto savedTeam = this.teamService.createTeam(teamCreateDto);
 
         URI location = ServletUriComponentsBuilder
@@ -37,13 +37,13 @@ public class TeamsController {
         return ResponseEntity.created(location).build();
     }
 
-        @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<Object> update(@RequestParam(name = "id") String id, @RequestBody TeamUpdateDto teamUpdateDto) {
+    @RequestMapping(method = RequestMethod.PUT, path = "/update-team/{id}")
+    public ResponseEntity<Object> update(@PathVariable(name = "id") String id, @RequestBody TeamUpdateDto teamUpdateDto) {
         return ResponseEntity.ok(this.teamService.updateTeam(id, teamUpdateDto));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-    public ResponseEntity<Object> delete(@PathVariable(name = "id") String id) {
+    @RequestMapping(method = RequestMethod.DELETE, path = "/delete-team/{id}")
+    public ResponseEntity<Object> deleteTeam(@PathVariable(name = "id") String id) {
         var isDeletedTeam = this.teamService.deleteTeam(id);
 
         if (!isDeletedTeam) {
@@ -53,7 +53,7 @@ public class TeamsController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, path = "/retrieve-team/{id}")
     public ResponseEntity<Object> retrieveTeam(@PathVariable(name = "id") String id) {
         return ResponseEntity.ok(this.teamService.retrieveTeam(id));
     }

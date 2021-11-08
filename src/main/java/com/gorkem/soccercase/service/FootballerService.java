@@ -1,6 +1,6 @@
 package com.gorkem.soccercase.service;
 
-import com.gorkem.soccercase.exception.UserNotFoundException;
+import com.gorkem.soccercase.exception.ResourceNotFoundException;
 import com.gorkem.soccercase.model.Footballer;
 import com.gorkem.soccercase.model.dto.FootballerCreateDto;
 import com.gorkem.soccercase.model.dto.FootballerUpdateDto;
@@ -38,7 +38,8 @@ public class FootballerService {
     }
 
     public FootballerRetrieveDto updateFootballer(String id, FootballerUpdateDto footballerUpdateDto) {
-        Footballer footballer = this.footballerRepository.getById(id);
+        Footballer footballer = this.footballerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Footballer not found for this id : %s", id)));
 
         Footballer updatedFootballer = this.footballerDtoConverter.convertForUpdate(footballerUpdateDto, footballer);
 
@@ -47,7 +48,7 @@ public class FootballerService {
 
     public boolean deleteFootballer(String id) {
         Footballer footballer = this.footballerRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(String.format("Footballer not found for this id : %s", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Footballer not found for this id : %s", id)));
 
         try {
             this.footballerRepository.delete(footballer);
@@ -59,7 +60,7 @@ public class FootballerService {
 
     public FootballerRetrieveDto retrieveFootballer(String id) {
         Footballer footballer = this.footballerRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(String.format("Footballer not found for this id : %s", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Footballer not found for this id : %s", id)));
 
         return this.footballerDtoConverter.convertForRetrieve(footballer);
     }

@@ -46,9 +46,9 @@ public class FootballersController {
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
     public ResponseEntity<Object> delete(@PathVariable(name = "id") String id) {
-        var isDeleted = this.footballerService.deleteFootballer(id);
+        var isDeletedFootballer = this.footballerService.deleteFootballer(id);
 
-        if (!isDeleted) {
+        if (!isDeletedFootballer) {
             return ResponseEntity.badRequest().build();
         } else {
             return ResponseEntity.ok().build();

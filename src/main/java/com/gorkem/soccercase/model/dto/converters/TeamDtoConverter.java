@@ -24,12 +24,11 @@ public class TeamDtoConverter {
     public TeamRetrieveDto convertForRetrieve(Team team) {
         List<FootballerRetrieveDto> footballerRetrieveDtos = this.footballerDtoConverter.multipleConvertForRetrieve(team.getFootballers());
 
-        TeamRetrieveDto dto = new TeamRetrieveDto();
-        dto.setId(team.getId());
-        dto.setName(team.getName());
-        dto.setFootballers(footballerRetrieveDtos);
-
-        return dto;
+        return TeamRetrieveDto.builder()
+                .id(team.getId())
+                .name(team.getName())
+                .footballers(footballerRetrieveDtos)
+                .build();
     }
 
     public Team convertForCreate(TeamCreateDto teamCreateDto) {

@@ -29,6 +29,10 @@ public class TeamsController {
     public ResponseEntity<Object> retrieveTeams() {
         List<TeamRetrieveDto> teamRetrieveDtos = this.teamService.retrieveTeams();
 
+        if (teamRetrieveDtos.contains(null) || teamRetrieveDtos.contains("")) {
+            return ResponseEntity.noContent().build();
+        }
+
         SimpleBeanPropertyFilter propertyFilterForTeams = SimpleBeanPropertyFilter
                 .filterOutAllExcept("name", "footballers");
 
@@ -39,37 +43,47 @@ public class TeamsController {
                 .addFilter("RetrieveFootballerFilter", propertyFilterForFootballers)
                 .addFilter("RetrieveTeamFilter", propertyFilterForTeams);
 
-        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(teamRetrieveDtos);
-        mappingJacksonValue.setFilters(filterProvider);
+        MappingJacksonValue mapper = new MappingJacksonValue(teamRetrieveDtos);
+        mapper.setFilters(filterProvider);
 
-        return ResponseEntity.ok(mappingJacksonValue);
+        return ResponseEntity.ok(mapper);
     }
 
     @PostMapping
     public ResponseEntity<Object> createTeam(@RequestBody TeamCreateDto teamCreateDto) {
         TeamRetrieveDto savedTeam = this.teamService.createTeam(teamCreateDto);
 
+        if (savedTeam == null) {
+            return ResponseEntity.noContent().build();
+        }
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(savedTeam.getId()).toUri();
+                .buildAndExpand(savedTeam.getId())
+                .toUri();
 
         return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable(name = "id") String id, @RequestBody TeamUpdateDto teamUpdateDto) {
-        return ResponseEntity.ok(this.teamService.updateTeam(id, teamUpdateDto));
+        TeamRetrieveDto updatedTeam = this.teamService.updateTeam(id, teamUpdateDto);
+
+        if (updatedTeam == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(updatedTeam);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTeam(@PathVariable(name = "id") String id) {
         var isDeletedTeam = this.teamService.deleteTeam(id);
 
-        if (!isDeletedTeam) {
-            return ResponseEntity.badRequest().build();
-        } else {
+        if (isDeletedTeam) {
             return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.noContent().build();
         }
     }
 
@@ -78,6 +92,10 @@ public class TeamsController {
     public ResponseEntity<Object> retrieveTeam(@PathVariable(name = "id") String id) {
         TeamRetrieveDto teamRetrieveDto = this.teamService.retrieveTeam(id);
 
+        if (teamRetrieveDto == null) {
+            return ResponseEntity.noContent().build();
+        }
+
         SimpleBeanPropertyFilter propertyFilterForTeams = SimpleBeanPropertyFilter
                 .filterOutAllExcept("name", "footballers");
 
@@ -88,9 +106,9 @@ public class TeamsController {
                 .addFilter("RetrieveFootballerFilter", propertyFilterForFootballers)
                 .addFilter("RetrieveTeamFilter", propertyFilterForTeams);
 
-        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(teamRetrieveDto);
-        mappingJacksonValue.setFilters(filterProvider);
+        MappingJacksonValue mapper = new MappingJacksonValue(teamRetrieveDto);
+        mapper.setFilters(filterProvider);
 
-        return ResponseEntity.ok(mappingJacksonValue);
+        return ResponseEntity.ok(mapper);
     }
 }

@@ -1,6 +1,8 @@
 package com.gorkem.soccercase.service;
 
+import com.gorkem.soccercase.constants.Message;
 import com.gorkem.soccercase.exception.ResourceNotFoundException;
+import com.gorkem.soccercase.exception.ServiceLayerException;
 import com.gorkem.soccercase.model.Team;
 import com.gorkem.soccercase.model.dto.TeamCreateDto;
 import com.gorkem.soccercase.model.dto.TeamRetrieveDto;
@@ -24,8 +26,13 @@ public class TeamService {
     }
 
     public List<TeamRetrieveDto> retrieveTeams() {
-        List<Team> teams = this.teamRepository.findAll();
+        List<Team> teams;
+        try {
+            teams = this.teamRepository.findAll();
 
+        } catch (Exception e) {
+            throw new ServiceLayerException(Message.TEAM_FAIL_RETRIEVE_RECORDS);
+        }
         return teams.stream()
                 .map(teamDtoConverter::convertForRetrieve)
                 .collect(Collectors.toList());
@@ -34,39 +41,49 @@ public class TeamService {
     public TeamRetrieveDto createTeam(TeamCreateDto teamCreateDto) {
         Team team = this.teamDtoConverter.convertForCreate(teamCreateDto);
 
-        return this.teamDtoConverter.convertForRetrieve(this.teamRepository.save(team));
+        Team savedTeam;
+        try {
+            savedTeam = this.teamRepository.save(team);
+
+        } catch (Exception e) {
+            throw new ServiceLayerException(Message.TEAM_FAIL_SAVING_RECORD);
+        }
+        return this.teamDtoConverter.convertForRetrieve(savedTeam);
     }
 
     public TeamRetrieveDto updateTeam(String id, TeamUpdateDto teamUpdateDto) {
-        Team team = this.teamRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Team not found for this id : %s", id)));
+        Team team = findTeamById(id);
 
         Team updatedTeam = this.teamDtoConverter.convertForUpdate(teamUpdateDto, team);
 
-        return this.teamDtoConverter.convertForRetrieve(this.teamRepository.save(updatedTeam));
+        Team savedTeam;
+        try {
+            savedTeam = this.teamRepository.save(updatedTeam);
+
+        } catch (Exception e) {
+            throw new ServiceLayerException(Message.TEAM_FAIL_UPDATING_RECORD);
+        }
+        return this.teamDtoConverter.convertForRetrieve(savedTeam);
     }
 
     public boolean deleteTeam(String id) {
-        Team team = this.teamRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Team not found for this id : %s", id)));
-
+        Team team = findTeamById(id);
         try {
             this.teamRepository.delete(team);
-            return true;
         } catch (Exception e) {
-            return false;
+            throw new ServiceLayerException(Message.TEAM_FAIL_DELETING_RECORD);
         }
+        return true;
     }
 
     public TeamRetrieveDto retrieveTeam(String id) {
-        Team team = this.teamRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Team not found for this id : %s", id)));
+        Team team = findTeamById(id);
 
         return this.teamDtoConverter.convertForRetrieve(team);
     }
 
     public Team findTeamById(String id) {
         return this.teamRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Team not found for this id : %s", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(Message.PUBLIC_FAIL_RECORD_NOT_FOUND + id)));
     }
 }

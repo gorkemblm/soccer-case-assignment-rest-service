@@ -1,0 +1,60 @@
+Bayer Leverkusen
+Bayern München
+Borussia Dortmund
+Fortuna Düsseldorf
+Borussia Mönchengladbach
+Eintracht Frankfurt
+SC Freiburg
+SpVgg Greuther Fürth
+Hamburg
+Hannover 96
+TSG 1899 Hoffenheim
+FSV Mainz
+FC Nürnberg
+Schalke
+FC St. Pauli
+VfB Stuttgart
+SV Werder Bremen
+VfL Wolfsburg
+FC Encamp
+UE Engordany
+Inter Club d'Escaldes
+Lusitanos
+CE Principat
+UE Sant Julià
+FC Santa Coloma
+UE Santa Coloma
+KS Apolonia Fier
+Besa
+Bylis
+Flamurtari Vlorë
+KS Kastrioti
+FK Kukësi
+KF Laçi
+Luftëtari Gjirokastër
+Shkumbini
+Skënderbeu
+Teuta
+KF Tirana
+FK Tomori Berat
+Vllaznia Shkodër
+AC Ajaccio
+Bastia
+Brest
+Bordeaux
+Evian Thonon Gaillard FC
+Lille OSC
+FC Lorient
+Olympique Lyonnais
+Olympique de Marseille
+Montpellier HSC
+Nancy
+OGC Nice
+Paris Saint-Germain
+Stade de Reims
+Stade Rennais FC
+Saint-Étienne
+Sochaux
+Toulouse FC
+Troyes AC
+Valenciennes FC

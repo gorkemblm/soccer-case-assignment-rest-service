@@ -12,6 +12,8 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class FootballersController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createFootballer(@RequestBody FootballerCreateDto footballerCreateDto) {
+    public ResponseEntity<Object> createFootballer(@Valid @RequestBody FootballerCreateDto footballerCreateDto) {
         FootballerRetrieveDto savedFootballer = this.footballerService.createFootballer(footballerCreateDto);
 
         if (savedFootballer == null) {
@@ -63,7 +65,9 @@ public class FootballersController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateFootballer(@PathVariable(name = "id") String id, @RequestBody FootballerUpdateDto footballerUpdateDto) {
+    public ResponseEntity<Object> updateFootballer(@NotBlank(message = "Footballer id must not be empty or null.") @PathVariable(name = "id") String id,
+                                                   @Valid @RequestBody FootballerUpdateDto footballerUpdateDto) {
+
         FootballerRetrieveDto updatedFootballer = this.footballerService.updateFootballer(id, footballerUpdateDto);
 
         if (updatedFootballer == null) {
@@ -73,7 +77,7 @@ public class FootballersController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Object> delete(@NotBlank(message = "Footballer id must not be empty or null.") @PathVariable(name = "id") String id) {
         var isDeletedFootballer = this.footballerService.deleteFootballer(id);
 
         if (isDeletedFootballer) {
@@ -84,7 +88,7 @@ public class FootballersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> retrieveFootballer(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Object> retrieveFootballer(@NotBlank(message = "Footballer id must not be empty or null.") @PathVariable(name = "id") String id) {
         FootballerRetrieveDto footballerRetrieveDto = this.footballerService.retrieveFootballer(id);
 
         if (footballerRetrieveDto == null) {

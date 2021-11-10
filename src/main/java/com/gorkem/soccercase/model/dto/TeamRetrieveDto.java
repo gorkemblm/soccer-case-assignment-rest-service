@@ -1,6 +1,6 @@
 package com.gorkem.soccercase.model.dto;
 
-import com.gorkem.soccercase.model.Footballer;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonFilter("RetrieveTeamFilter")
 public class TeamRetrieveDto {
     private String id;
     private String name;
-    private List<Footballer> footballers;
+    private List<FootballerRetrieveDto> footballers;
 }

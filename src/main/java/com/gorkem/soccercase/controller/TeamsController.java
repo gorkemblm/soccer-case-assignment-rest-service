@@ -12,6 +12,8 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.util.List;
 
@@ -50,7 +52,7 @@ public class TeamsController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createTeam(@RequestBody TeamCreateDto teamCreateDto) {
+    public ResponseEntity<Object> createTeam(@Valid @RequestBody TeamCreateDto teamCreateDto) {
         TeamRetrieveDto savedTeam = this.teamService.createTeam(teamCreateDto);
 
         if (savedTeam == null) {
@@ -67,7 +69,9 @@ public class TeamsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable(name = "id") String id, @RequestBody TeamUpdateDto teamUpdateDto) {
+    public ResponseEntity<Object> update(@NotBlank(message = "Team id must not be empty or null.") @PathVariable(name = "id") String id,
+                                         @Valid @RequestBody TeamUpdateDto teamUpdateDto) {
+
         TeamRetrieveDto updatedTeam = this.teamService.updateTeam(id, teamUpdateDto);
 
         if (updatedTeam == null) {
@@ -77,7 +81,7 @@ public class TeamsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteTeam(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Object> deleteTeam(@NotBlank(message = "Team id must not be empty or null.") @PathVariable(name = "id") String id) {
         var isDeletedTeam = this.teamService.deleteTeam(id);
 
         if (isDeletedTeam) {
@@ -89,7 +93,7 @@ public class TeamsController {
 
     //Duplicate CODE -> move property filters to global scope
     @GetMapping("/{id}")
-    public ResponseEntity<Object> retrieveTeam(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Object> retrieveTeam(@NotBlank(message = "Team id must not be empty or null.") @PathVariable(name = "id") String id) {
         TeamRetrieveDto teamRetrieveDto = this.teamService.retrieveTeam(id);
 
         if (teamRetrieveDto == null) {

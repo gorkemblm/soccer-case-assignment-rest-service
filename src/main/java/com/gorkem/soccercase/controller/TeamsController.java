@@ -51,7 +51,7 @@ public class TeamsController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/retrieve-team/{id}")
+                .path("/{id}")
                 .buildAndExpand(savedTeam.getId()).toUri();
 
         return ResponseEntity.created(location).build();

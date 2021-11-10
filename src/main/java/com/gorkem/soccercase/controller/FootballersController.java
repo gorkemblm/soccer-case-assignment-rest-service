@@ -47,7 +47,7 @@ public class FootballersController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/retrieve-footballer/{id}")
+                .path("/{id}")
                 .buildAndExpand(savedFootballer.getId()).toUri();
 
         return ResponseEntity.created(location).build();

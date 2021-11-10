@@ -1,12 +1,13 @@
 package com.gorkem.soccercase.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -17,9 +18,10 @@ import java.util.UUID;
 @Table(name = "teams")
 public class Team {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @Column(name = "id")
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
     @Column(name = "name", length = 128, nullable = false)
     private String name;
@@ -30,6 +32,7 @@ public class Team {
     @Column(name = "updated_at")
     private String updatedAt;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"teams", "hibernateLazyInitializer", "handler"})
     private List<Footballer> footballers;
 }

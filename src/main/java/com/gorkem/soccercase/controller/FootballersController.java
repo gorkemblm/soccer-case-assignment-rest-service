@@ -29,43 +29,57 @@ public class FootballersController {
     public ResponseEntity<Object> retrieveFootballers() {
         List<FootballerRetrieveDto> footballerRetrieveDtos = this.footballerService.retrieveFootballers();
 
+        if (footballerRetrieveDtos.contains(null) || footballerRetrieveDtos.contains("")) {
+            return ResponseEntity.noContent().build();
+        }
+
         SimpleBeanPropertyFilter propertyFilter = SimpleBeanPropertyFilter
                 .filterOutAllExcept("firstName", "lastName", "age", "nationality", "position", "teamName");
 
         FilterProvider filterProvider = new SimpleFilterProvider()
                 .addFilter("RetrieveFootballerFilter", propertyFilter);
 
-        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(footballerRetrieveDtos);
-        mappingJacksonValue.setFilters(filterProvider);
+        MappingJacksonValue mapper = new MappingJacksonValue(footballerRetrieveDtos);
+        mapper.setFilters(filterProvider);
 
-        return ResponseEntity.ok(mappingJacksonValue);
+        return ResponseEntity.ok(mapper);
     }
 
     @PostMapping
     public ResponseEntity<Object> createFootballer(@RequestBody FootballerCreateDto footballerCreateDto) {
         FootballerRetrieveDto savedFootballer = this.footballerService.createFootballer(footballerCreateDto);
 
+        if (savedFootballer == null) {
+            return ResponseEntity.noContent().build();
+        }
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(savedFootballer.getId()).toUri();
+                .buildAndExpand(savedFootballer.getId())
+                .toUri();
 
         return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateFootballer(@PathVariable(name = "id") String id, @RequestBody FootballerUpdateDto footballerUpdateDto) {
-        return ResponseEntity.ok(this.footballerService.updateFootballer(id, footballerUpdateDto));
+        FootballerRetrieveDto updatedFootballer = this.footballerService.updateFootballer(id, footballerUpdateDto);
+
+        if (updatedFootballer == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(updatedFootballer);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(name = "id") String id) {
         var isDeletedFootballer = this.footballerService.deleteFootballer(id);
 
-        if (!isDeletedFootballer) {
-            return ResponseEntity.badRequest().build();
-        } else {
+        if (isDeletedFootballer) {
             return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -73,15 +87,19 @@ public class FootballersController {
     public ResponseEntity<Object> retrieveFootballer(@PathVariable(name = "id") String id) {
         FootballerRetrieveDto footballerRetrieveDto = this.footballerService.retrieveFootballer(id);
 
+        if (footballerRetrieveDto == null) {
+            return ResponseEntity.noContent().build();
+        }
+
         SimpleBeanPropertyFilter propertyFilter = SimpleBeanPropertyFilter
                 .filterOutAllExcept("firstName", "lastName", "age", "nationality", "position", "teamName");
 
         FilterProvider filterProvider = new SimpleFilterProvider()
                 .addFilter("RetrieveFootballerFilter", propertyFilter);
 
-        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(footballerRetrieveDto);
-        mappingJacksonValue.setFilters(filterProvider);
+        MappingJacksonValue mapper = new MappingJacksonValue(footballerRetrieveDto);
+        mapper.setFilters(filterProvider);
 
-        return ResponseEntity.ok(mappingJacksonValue);
+        return ResponseEntity.ok(mapper);
     }
 }

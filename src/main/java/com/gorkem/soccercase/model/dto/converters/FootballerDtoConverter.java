@@ -16,20 +16,18 @@ import java.util.stream.Collectors;
 public class FootballerDtoConverter {
 
     public FootballerRetrieveDto convertForRetrieve(Footballer footballer) {
-        FootballerRetrieveDto dto = new FootballerRetrieveDto();
-        dto.setId(footballer.getId());
-        dto.setAge(footballer.getAge());
-        dto.setFirstName(footballer.getFirstName());
-        dto.setLastName(footballer.getLastName());
-        dto.setNationality(footballer.getNationality());
-        dto.setTeamName(footballer.getTeam().getName());
-        dto.setPosition(footballer.getPosition());
-
-        return dto;
+        return FootballerRetrieveDto.builder()
+                .id(footballer.getId())
+                .age(footballer.getAge())
+                .firstName(footballer.getFirstName())
+                .lastName(footballer.getLastName())
+                .nationality(footballer.getNationality())
+                .position(footballer.getPosition())
+                .teamName(footballer.getTeam().getName())
+                .build();
     }
 
     public List<FootballerRetrieveDto> multipleConvertForRetrieve(List<Footballer> footballers) {
-
         return footballers.stream()
                 .map(this::convertForRetrieve)
                 .collect(Collectors.toList());

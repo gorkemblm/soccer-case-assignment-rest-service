@@ -64,4 +64,9 @@ public class TeamService {
 
         return this.teamDtoConverter.convertForRetrieve(team);
     }
+
+    public Team findTeamById(String id) {
+        return this.teamRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Team not found for this id : %s", id)));
+    }
 }

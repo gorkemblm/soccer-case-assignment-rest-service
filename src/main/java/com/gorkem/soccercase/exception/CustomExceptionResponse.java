@@ -1,12 +1,12 @@
 package com.gorkem.soccercase.exception;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Date;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class CustomExceptionResponse {
     private Date timestamp;
     private String message;

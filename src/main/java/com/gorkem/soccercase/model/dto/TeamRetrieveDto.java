@@ -1,17 +1,14 @@
 package com.gorkem.soccercase.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @JsonFilter("RetrieveTeamFilter")
 public class TeamRetrieveDto {
     private String id;

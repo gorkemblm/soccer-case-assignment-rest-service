@@ -1,8 +1,8 @@
 package com.gorkem.soccercase.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.gorkem.soccercase.model.Nationality;
 import com.gorkem.soccercase.model.Position;
-import com.gorkem.soccercase.model.Team;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonFilter("RetrieveFootballerFilter")
 public class FootballerRetrieveDto {
     private String id;
     private String firstName;
@@ -19,5 +20,5 @@ public class FootballerRetrieveDto {
     private int age;
     private Nationality nationality;
     private Position position;
-    private Team team;
+    private String teamName;
 }

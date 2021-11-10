@@ -2,7 +2,6 @@ package com.gorkem.soccercase.model.dto;
 
 import com.gorkem.soccercase.model.Nationality;
 import com.gorkem.soccercase.model.Position;
-import com.gorkem.soccercase.model.Team;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +17,5 @@ public class FootballerCreateDto {
     private int age;
     private Nationality nationality;
     private Position position;
-    private Team team;
+    private String teamId;
 }

@@ -2,6 +2,7 @@ package com.gorkem.soccercase.service;
 
 import com.gorkem.soccercase.exception.ResourceNotFoundException;
 import com.gorkem.soccercase.model.Footballer;
+import com.gorkem.soccercase.model.Team;
 import com.gorkem.soccercase.model.dto.FootballerCreateDto;
 import com.gorkem.soccercase.model.dto.FootballerUpdateDto;
 import com.gorkem.soccercase.model.dto.converters.FootballerDtoConverter;
@@ -17,10 +18,12 @@ public class FootballerService {
 
     private final FootballerRepository footballerRepository;
     private final FootballerDtoConverter footballerDtoConverter;
+    private final TeamService teamService;
 
-    public FootballerService(FootballerRepository footballerRepository, FootballerDtoConverter footballerDtoConverter) {
+    public FootballerService(FootballerRepository footballerRepository, FootballerDtoConverter footballerDtoConverter, TeamService teamService) {
         this.footballerRepository = footballerRepository;
         this.footballerDtoConverter = footballerDtoConverter;
+        this.teamService = teamService;
     }
 
     public List<FootballerRetrieveDto> retrieveFootballers() {
@@ -32,16 +35,20 @@ public class FootballerService {
     }
 
     public FootballerRetrieveDto createFootballer(FootballerCreateDto footballerCreateDto) {
-        Footballer footballer = this.footballerDtoConverter.convertForCreate(footballerCreateDto);
+        Team team = this.teamService.findTeamById(footballerCreateDto.getTeamId());
+
+        Footballer footballer = this.footballerDtoConverter.convertForCreate(footballerCreateDto, team);
 
         return this.footballerDtoConverter.convertForRetrieve(this.footballerRepository.save(footballer));
     }
 
     public FootballerRetrieveDto updateFootballer(String id, FootballerUpdateDto footballerUpdateDto) {
+        Team team = this.teamService.findTeamById(footballerUpdateDto.getTeamId());
+
         Footballer footballer = this.footballerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Footballer not found for this id : %s", id)));
 
-        Footballer updatedFootballer = this.footballerDtoConverter.convertForUpdate(footballerUpdateDto, footballer);
+        Footballer updatedFootballer = this.footballerDtoConverter.convertForUpdate(footballerUpdateDto, footballer, team);
 
         return this.footballerDtoConverter.convertForRetrieve(this.footballerRepository.save(updatedFootballer));
     }

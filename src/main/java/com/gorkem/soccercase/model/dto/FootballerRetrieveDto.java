@@ -3,15 +3,12 @@ package com.gorkem.soccercase.model.dto;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.gorkem.soccercase.model.Nationality;
 import com.gorkem.soccercase.model.Position;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @JsonFilter("RetrieveFootballerFilter")
 public class FootballerRetrieveDto {
     private String id;

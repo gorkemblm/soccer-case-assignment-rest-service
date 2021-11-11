@@ -18,7 +18,7 @@ public class Message {
     */
     public static final String TEAM_FAIL_RETRIEVE_RECORDS = "There was a problem retrieving records from the team database.";
     public static final String TEAM_FAIL_SAVING_RECORD = "There was a problem saving the recording to the team database.";
-    public static final String TEAM_FAIL_UPDATING_RECORD= "There was a problem saving the updated record to the team database.";
+    public static final String TEAM_FAIL_UPDATING_RECORD = "There was a problem saving the updated record to the team database.";
     public static final String TEAM_FAIL_DELETING_RECORD = "An error occurred while deleting a record from the team database.";
     /*
     FOOTBALLER VALIDATION MESSAGES
@@ -34,10 +34,12 @@ public class Message {
     public static final String FOOTBALLER_NATIONALITY_NOT_EMPTY = "Nationality must not be empty.";
     public static final String FOOTBALLER_POSITION_NOT_EMPTY = "Position must not be empty.";
     public static final String FOOTBALLER_TEAM_ID_NOT_BLANK = "Team id must not be empty or null.";
+    public static final String FOOTBALLER_ID_NOT_BLANK = "Footballer id must not be empty or null.";
     /*
     TEAM VALIDATION MESSAGES
     */
     public static final String TEAM_NAME_NOT_BLANK = "Team name must not be empty or null.";
     public static final String TEAM_NAME_MIN_SIZE_3 = "Team name should not be less than 3.";
     public static final String TEAM_NAME_MAX_SIZE_128 = "Team name should not be greater than 128.";
+    public static final String TEAM_ID_NOT_BLANK = "Team id must not be empty or null.";
 }

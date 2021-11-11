@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class TeamDtoConverter {
@@ -41,11 +40,5 @@ public class TeamDtoConverter {
         team.setName(teamUpdateDto.getName());
         team.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
         return team;
-    }
-
-    public List<TeamRetrieveDto> multipleConvertForRetrieve(List<Team> teams) {
-        return teams.stream()
-                .map(this::convertForRetrieve)
-                .collect(Collectors.toList());
     }
 }

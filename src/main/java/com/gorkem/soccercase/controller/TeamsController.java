@@ -35,7 +35,6 @@ public class TeamsController {
         if (teamRetrieveDtos.contains(null) || teamRetrieveDtos.contains("")) {
             return ResponseEntity.noContent().build();
         }
-
         SimpleBeanPropertyFilter propertyFilterForTeams = SimpleBeanPropertyFilter
                 .filterOutAllExcept("name");
 
@@ -66,15 +65,16 @@ public class TeamsController {
     }
 
     @PutMapping(value = "/{id}", headers = "API-VERSION=1")
-    public ResponseEntity<Object> update(@NotBlank(message = Message.TEAM_ID_NOT_BLANK) @PathVariable(name = "id") String id,
-                                         @Valid @RequestBody TeamUpdateDto teamUpdateDto) {
+    public ResponseEntity<Object> updateTeam(@NotBlank(message = Message.TEAM_ID_NOT_BLANK) @PathVariable(name = "id") String id,
+                                             @Valid @RequestBody TeamUpdateDto teamUpdateDto) {
 
-        TeamRetrieveDto updatedTeam = this.teamService.updateTeam(id, teamUpdateDto);
+        var updatedTeam = this.teamService.updateTeam(id, teamUpdateDto);
 
         if (updatedTeam == null) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(updatedTeam);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{id}", headers = "API-VERSION=1")

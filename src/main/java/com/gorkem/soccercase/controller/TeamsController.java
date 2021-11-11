@@ -3,6 +3,7 @@ package com.gorkem.soccercase.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.gorkem.soccercase.constants.Message;
 import com.gorkem.soccercase.model.dto.TeamCreateDto;
 import com.gorkem.soccercase.model.dto.TeamRetrieveDto;
 import com.gorkem.soccercase.model.dto.TeamUpdateDto;
@@ -18,7 +19,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teams")
+@RequestMapping(value = "/teams")
 public class TeamsController {
 
     private final TeamService teamService;
@@ -27,7 +28,7 @@ public class TeamsController {
         this.teamService = teamService;
     }
 
-    @GetMapping
+    @GetMapping(headers = "API-VERSION=1")
     public ResponseEntity<Object> retrieveTeams() {
         List<TeamRetrieveDto> teamRetrieveDtos = this.teamService.retrieveTeams();
 
@@ -36,13 +37,9 @@ public class TeamsController {
         }
 
         SimpleBeanPropertyFilter propertyFilterForTeams = SimpleBeanPropertyFilter
-                .filterOutAllExcept("name", "footballers");
-
-        SimpleBeanPropertyFilter propertyFilterForFootballers = SimpleBeanPropertyFilter
-                .filterOutAllExcept("firstName", "lastName", "age", "position");
+                .filterOutAllExcept("name");
 
         FilterProvider filterProvider = new SimpleFilterProvider()
-                .addFilter("RetrieveFootballerFilter", propertyFilterForFootballers)
                 .addFilter("RetrieveTeamFilter", propertyFilterForTeams);
 
         MappingJacksonValue mapper = new MappingJacksonValue(teamRetrieveDtos);
@@ -51,7 +48,7 @@ public class TeamsController {
         return ResponseEntity.ok(mapper);
     }
 
-    @PostMapping
+    @PostMapping(headers = "API-VERSION=1")
     public ResponseEntity<Object> createTeam(@Valid @RequestBody TeamCreateDto teamCreateDto) {
         TeamRetrieveDto savedTeam = this.teamService.createTeam(teamCreateDto);
 
@@ -68,8 +65,8 @@ public class TeamsController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@NotBlank(message = "Team id must not be empty or null.") @PathVariable(name = "id") String id,
+    @PutMapping(value = "/{id}", headers = "API-VERSION=1")
+    public ResponseEntity<Object> update(@NotBlank(message = Message.TEAM_ID_NOT_BLANK) @PathVariable(name = "id") String id,
                                          @Valid @RequestBody TeamUpdateDto teamUpdateDto) {
 
         TeamRetrieveDto updatedTeam = this.teamService.updateTeam(id, teamUpdateDto);
@@ -80,8 +77,8 @@ public class TeamsController {
         return ResponseEntity.ok(updatedTeam);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteTeam(@NotBlank(message = "Team id must not be empty or null.") @PathVariable(name = "id") String id) {
+    @DeleteMapping(value = "/{id}", headers = "API-VERSION=1")
+    public ResponseEntity<Object> deleteTeam(@NotBlank(message = Message.TEAM_ID_NOT_BLANK) @PathVariable(name = "id") String id) {
         var isDeletedTeam = this.teamService.deleteTeam(id);
 
         if (isDeletedTeam) {
@@ -91,9 +88,8 @@ public class TeamsController {
         }
     }
 
-    //Duplicate CODE -> move property filters to global scope
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> retrieveTeam(@NotBlank(message = "Team id must not be empty or null.") @PathVariable(name = "id") String id) {
+    @GetMapping(value = "/{id}", headers = "API-VERSION=1")
+    public ResponseEntity<Object> retrieveTeam(@NotBlank(message = Message.TEAM_ID_NOT_BLANK) @PathVariable(name = "id") String id) {
         TeamRetrieveDto teamRetrieveDto = this.teamService.retrieveTeam(id);
 
         if (teamRetrieveDto == null) {

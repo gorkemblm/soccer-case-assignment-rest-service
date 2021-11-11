@@ -3,6 +3,7 @@ package com.gorkem.soccercase.controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.gorkem.soccercase.constants.Message;
 import com.gorkem.soccercase.model.dto.FootballerCreateDto;
 import com.gorkem.soccercase.model.dto.FootballerRetrieveDto;
 import com.gorkem.soccercase.model.dto.FootballerUpdateDto;
@@ -18,7 +19,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/footballers")
+@RequestMapping(value = "/footballers")
 public class FootballersController {
 
     private final FootballerService footballerService;
@@ -27,7 +28,7 @@ public class FootballersController {
         this.footballerService = footballerService;
     }
 
-    @GetMapping
+    @GetMapping(headers = "API-VERSION=1")
     public ResponseEntity<Object> retrieveFootballers() {
         List<FootballerRetrieveDto> footballerRetrieveDtos = this.footballerService.retrieveFootballers();
 
@@ -47,7 +48,7 @@ public class FootballersController {
         return ResponseEntity.ok(mapper);
     }
 
-    @PostMapping
+    @PostMapping(headers = "API-VERSION=1")
     public ResponseEntity<Object> createFootballer(@Valid @RequestBody FootballerCreateDto footballerCreateDto) {
         FootballerRetrieveDto savedFootballer = this.footballerService.createFootballer(footballerCreateDto);
 
@@ -64,8 +65,8 @@ public class FootballersController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> updateFootballer(@NotBlank(message = "Footballer id must not be empty or null.") @PathVariable(name = "id") String id,
+    @PutMapping(value = "/{id}", headers = "API-VERSION=1")
+    public ResponseEntity<Object> updateFootballer(@NotBlank(message = Message.FOOTBALLER_ID_NOT_BLANK) @PathVariable(name = "id") String id,
                                                    @Valid @RequestBody FootballerUpdateDto footballerUpdateDto) {
 
         FootballerRetrieveDto updatedFootballer = this.footballerService.updateFootballer(id, footballerUpdateDto);
@@ -76,8 +77,8 @@ public class FootballersController {
         return ResponseEntity.ok(updatedFootballer);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@NotBlank(message = "Footballer id must not be empty or null.") @PathVariable(name = "id") String id) {
+    @DeleteMapping(value = "/{id}", headers = "API-VERSION=1")
+    public ResponseEntity<Object> delete(@NotBlank(message = Message.FOOTBALLER_ID_NOT_BLANK) @PathVariable(name = "id") String id) {
         var isDeletedFootballer = this.footballerService.deleteFootballer(id);
 
         if (isDeletedFootballer) {
@@ -87,8 +88,8 @@ public class FootballersController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> retrieveFootballer(@NotBlank(message = "Footballer id must not be empty or null.") @PathVariable(name = "id") String id) {
+    @GetMapping(value = "/{id}", headers = "API-VERSION=1")
+    public ResponseEntity<Object> retrieveFootballer(@NotBlank(message = Message.FOOTBALLER_ID_NOT_BLANK) @PathVariable(name = "id") String id) {
         FootballerRetrieveDto footballerRetrieveDto = this.footballerService.retrieveFootballer(id);
 
         if (footballerRetrieveDto == null) {

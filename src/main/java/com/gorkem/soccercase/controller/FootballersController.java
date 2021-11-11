@@ -69,12 +69,12 @@ public class FootballersController {
     public ResponseEntity<Object> updateFootballer(@NotBlank(message = Message.FOOTBALLER_ID_NOT_BLANK) @PathVariable(name = "id") String id,
                                                    @Valid @RequestBody FootballerUpdateDto footballerUpdateDto) {
 
-        FootballerRetrieveDto updatedFootballer = this.footballerService.updateFootballer(id, footballerUpdateDto);
+        var updatedFootballer = this.footballerService.updateFootballer(id, footballerUpdateDto);
 
         if (updatedFootballer == null) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(updatedFootballer);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{id}", headers = "API-VERSION=1")

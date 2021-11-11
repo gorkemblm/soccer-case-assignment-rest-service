@@ -84,6 +84,6 @@ public class TeamService {
 
     public Team findTeamById(String id) {
         return this.teamRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(Message.PUBLIC_FAIL_RECORD_NOT_FOUND + id)));
+                .orElseThrow(() -> new ResourceNotFoundException(Message.PUBLIC_FAIL_RECORD_NOT_FOUND + id));
     }
 }
